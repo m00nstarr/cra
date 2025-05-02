@@ -37,8 +37,8 @@ public:
                 int result = operand1 + operand2;
                 r-&gt;setResult(result);
                 r-&gt;setStatus(0);
-            }</span>
-<span style = "background-color:#fdd">            else if (operand1 == -1) {
+            }
+            else if (operand1 == -1) {
                 r-&gt;setResult(65535);
                 r-&gt;setStatus(1);
             }
@@ -46,8 +46,8 @@ public:
                 r-&gt;setResult(65535);
                 r-&gt;setStatus(2);</span>
             }
-<span style = "background-color:#dfd">        }</span>
-<span style = "background-color:#fdd">        else if (OPCODE != "ADD" &amp;&amp; OPCODE == "MUL" &amp;&amp; OPCODE != "SUB") {
+<span style = "background-color:#dfd">        }
+        else if (OPCODE != "ADD" &amp;&amp; OPCODE == "MUL" &amp;&amp; OPCODE != "SUB") {
             if (operand1 != -1 &amp;&amp; operand2 != -1) {
                 int result = operand1 * operand2;
                 r-&gt;setResult(result);
@@ -61,7 +61,7 @@ public:
                 r-&gt;setResult(65535);
                 r-&gt;setStatus(2);</span>
             }
-<span style = "background-color:#fdd">        }
+<span style = "background-color:#dfd">        }
         else if (OPCODE != "ADD" &amp;&amp; OPCODE != "MUL" &amp;&amp; OPCODE == "SUB") {
             if (operand1 != -1 &amp;&amp; operand2 != -1) {
                 int result = operand1 - operand2;
@@ -76,9 +76,9 @@ public:
                 r-&gt;setResult(65535);
                 r-&gt;setStatus(2);</span>
             }
-<span style = "background-color:#fdd">        }</span>
+<span style = "background-color:#dfd">        }</span>
         else {
-<span style = "background-color:#fdd">            r-&gt;setResult(65535);
+<span style = "background-color:#dfd">            r-&gt;setResult(65535);
             r-&gt;setStatus(3);</span>
         }
 <span style = "background-color:#dfd">    }</span>

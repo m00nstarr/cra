@@ -13,17 +13,125 @@
 #include "alu.cpp";
 #include "result.cpp";
 
-<span style = "background-color:#dfd">TEST(ALU, ADDTest) {
+using namespace testing;
+
+class ALUFixture : public Test {
+public:
 	ALU alu;
-	alu.setOperand1(10);
+	Result result;
+protected:
+
+<span style = "background-color:#dfd">	void SetUp() override {</span>
+
+<span style = "background-color:#dfd">	}
+	void TearDown() override {</span>
+
+<span style = "background-color:#dfd">	}</span>
+
+};
+
+
+<span style = "background-color:#dfd">TEST_F(ALUFixture, ADDTest) {</span>
+
+<span style = "background-color:#dfd">	alu.setOperand1(10);
 	alu.setOperand2(20);
 	alu.setOPCODE("ADD");</span>
 
-<span style = "background-color:#dfd">	Result ret;
-	alu.enableSignal(&amp;ret);</span>
+<span style = "background-color:#dfd">	alu.enableSignal(&amp;result);</span>
 
-<span style = "background-color:#dfd">	EXPECT_EQ(30, ret.getResult());
-	EXPECT_EQ(0, ret.getStatus());
+<span style = "background-color:#dfd">	EXPECT_EQ(30, result.getResult());
+	EXPECT_EQ(0, result.getStatus());
+}</span>
+
+<span style = "background-color:#dfd">TEST_F(ALUFixture, MULTest) {</span>
+
+<span style = "background-color:#dfd">	alu.setOperand1(10);
+	alu.setOperand2(20);
+	alu.setOPCODE("MUL");</span>
+
+<span style = "background-color:#dfd">	alu.enableSignal(&amp;result);</span>
+
+<span style = "background-color:#dfd">	EXPECT_EQ(200, result.getResult());
+	EXPECT_EQ(0, result.getStatus());
+}</span>
+
+<span style = "background-color:#dfd">TEST_F(ALUFixture, SUBTest) {</span>
+
+<span style = "background-color:#dfd">	alu.setOperand1(10);
+	alu.setOperand2(20);
+	alu.setOPCODE("SUB");</span>
+
+<span style = "background-color:#dfd">	alu.enableSignal(&amp;result);</span>
+
+<span style = "background-color:#dfd">	EXPECT_EQ(-10, result.getResult());
+	EXPECT_EQ(0, result.getStatus());
+}</span>
+
+<span style = "background-color:#dfd">TEST_F(ALUFixture, MulNoOperand) {</span>
+
+<span style = "background-color:#dfd">	alu.setOperand2(20);
+	alu.setOPCODE("MUL");</span>
+
+<span style = "background-color:#dfd">	alu.enableSignal(&amp;result);</span>
+
+<span style = "background-color:#dfd">	EXPECT_EQ(65535, result.getResult());
+	EXPECT_EQ(1, result.getStatus());</span>
+
+<span style = "background-color:#dfd">	alu.setOperand2(-1);
+	alu.setOperand1(20);</span>
+
+<span style = "background-color:#dfd">	alu.enableSignal(&amp;result);</span>
+
+<span style = "background-color:#dfd">	EXPECT_EQ(65535, result.getResult());
+	EXPECT_EQ(2, result.getStatus());
+}</span>
+
+<span style = "background-color:#dfd">TEST_F(ALUFixture, AddNoOperand) {</span>
+
+<span style = "background-color:#dfd">	alu.setOperand2(20);
+	alu.setOPCODE("ADD");</span>
+
+<span style = "background-color:#dfd">	alu.enableSignal(&amp;result);</span>
+
+<span style = "background-color:#dfd">	EXPECT_EQ(65535, result.getResult());
+	EXPECT_EQ(1, result.getStatus());</span>
+
+<span style = "background-color:#dfd">	alu.setOperand1(20);
+	alu.setOperand2(-1);</span>
+
+<span style = "background-color:#dfd">	alu.enableSignal(&amp;result);
+	EXPECT_EQ(65535, result.getResult());
+	EXPECT_EQ(2, result.getStatus());
+}</span>
+
+<span style = "background-color:#dfd">TEST_F(ALUFixture, SubNoOperand) {</span>
+
+<span style = "background-color:#dfd">	alu.setOperand2(20);
+	alu.setOPCODE("SUB");</span>
+
+<span style = "background-color:#dfd">	alu.enableSignal(&amp;result);</span>
+
+<span style = "background-color:#dfd">	EXPECT_EQ(65535, result.getResult());
+	EXPECT_EQ(1, result.getStatus());</span>
+
+<span style = "background-color:#dfd">	alu.setOperand1(20);
+	alu.setOperand2(-1);</span>
+
+<span style = "background-color:#dfd">	alu.enableSignal(&amp;result);
+	EXPECT_EQ(65535, result.getResult());
+	EXPECT_EQ(2, result.getStatus());
+}</span>
+
+
+<span style = "background-color:#dfd">TEST_F(ALUFixture, NoOpCode) {</span>
+
+<span style = "background-color:#dfd">	alu.setOperand1(20);
+	alu.setOperand2(20);</span>
+
+<span style = "background-color:#dfd">	alu.enableSignal(&amp;result);</span>
+
+<span style = "background-color:#dfd">	EXPECT_EQ(65535, result.getResult());
+	EXPECT_EQ(3, result.getStatus());
 }</span></pre>
         <hr />
         <table width="100%">
