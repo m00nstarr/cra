@@ -5,6 +5,12 @@ class Result
     int status = -1;
     int result = 65535;
 
+    const int FAIL_RESULT = 65535;
+    const int NO_OPERAND_1 = 1;
+    const int NO_OPERAND_2 = 2;
+    const int SUCCESS = 0;
+    const int NO_RESULT = -1;
+
     //status -1 : 결과 안나옴
     //status 0 : 성공
     //status 1 : Operand1이 잘못됨

@@ -22,15 +22,15 @@ public:
 
 	int calculate(int operand1, int operand2, const std::string& opcode) {
 
-		if (opcode == "ADD") {
+		if (opcode == "ADD")
 			return operand1 + operand2;
-		}
-		else if (opcode == "SUB") {
+
+		if (opcode == "SUB") 
 			return operand1 - operand2;
-		}
-		else if (opcode == "MUL") {
+		
+		if (opcode == "MUL")
 			return operand1 * operand2;
-		}
+
 	}
 
 
@@ -42,6 +42,7 @@ public:
 				r->setStatus(1);
 				return;
 			}
+
 			r->setResult(65535);
 			r->setStatus(2);
 			return;
@@ -58,6 +59,8 @@ public:
 		r->setResult(calculate(operand1, operand2, OPCODE));
 		r->setStatus(0);
 		return;
+
+
 	}
 	bool isValidOperand()
 	{
