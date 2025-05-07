@@ -37,31 +37,27 @@ public:
 	void enableSignal(Result* r) {
 
 		if (isValidOperand() == false) {
+			
 			if (operand1 == -1) {
-				r->setResult(65535);
-				r->setStatus(1);
+				r->setStatus(Result::NO_OPERAND_1);
 				return;
 			}
 
-			r->setResult(65535);
-			r->setStatus(2);
+			r->setStatus(Result::NO_OPERAND_2);
 			return;
 		}
 
 		if (isValidOpcode() == false) {
-			r->setResult(65535);
-			r->setStatus(3);
-
+			r->setStatus(Result::NO_OPCODE);
 			return;
 		}
 
-		int result = 0;
 		r->setResult(calculate(operand1, operand2, OPCODE));
-		r->setStatus(0);
+		r->setStatus(Result::SUCCESS);
 		return;
 
-
 	}
+
 	bool isValidOperand()
 	{
 		return operand1 != -1 && operand2 != -1;

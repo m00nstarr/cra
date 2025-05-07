@@ -53,6 +53,7 @@ public:
 				r-&gt;setStatus(1);
 				return;</span>
 			}
+
 <span style = "background-color:#dfd">			r-&gt;setResult(65535);
 			r-&gt;setStatus(2);
 			return;</span>
@@ -69,6 +70,8 @@ public:
 		r-&gt;setResult(calculate(operand1, operand2, OPCODE));
 		r-&gt;setStatus(0);</span>
 		return;
+
+
 <span style = "background-color:#dfd">	}</span>
 	bool isValidOperand()
 <span style = "background-color:#dfd">	{
