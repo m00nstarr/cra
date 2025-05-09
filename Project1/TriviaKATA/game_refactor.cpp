@@ -19,6 +19,31 @@ public:
 	void setPurse(int purse) { this->purse = purse; }
 	void setPenalty(bool penalty) { this->inPenaltyBox = penalty; }
 
+	void action_w_rolling(int roll)
+	{
+		place += roll;
+
+		if (place > 11) {
+			place -= 12;
+		}
+
+		cout << name << "'s new location is " << place << endl;
+	}
+
+	void action_w_correctAns()
+	{
+		cout << "Answer was correct!!!!" << endl;
+		purse += 1;
+		cout << name  << " now has " << purse << " Gold Coins." << endl;
+	}
+
+	void action_w_wrongAns()
+	{
+		cout << "Question was incorrectly answered" << endl;
+		cout << name + " was sent to the penalty box" << endl;
+		inPenaltyBox = true;
+	}
+
 private:
 	string name;
 	int place;
@@ -71,20 +96,21 @@ public:
 		cout << Rplayers[currentPlayer].getName() << " is the current player" << endl;
 		cout << "They have rolled a " << roll << endl;
 
-		if (Rplayers[currentPlayer].getPenaltyBox()) {
-			if (roll % 2 != 0) {
-				isGettingOutOfPenaltyBox = true;
-				cout << Rplayers[currentPlayer].getName() << " is getting out of the penalty box" << endl;
-
-				action_w_rolling(roll);
-				return;
-			}
+		if (Rplayers[currentPlayer].getPenaltyBox() && (roll % 2 == 0)) {
 			cout << Rplayers[currentPlayer].getName() << " is not getting out of the penalty box" << endl;
 			isGettingOutOfPenaltyBox = false;
 			return;
 		}
 
-		action_w_rolling(roll);
+		if (Rplayers[currentPlayer].getPenaltyBox()) {
+			isGettingOutOfPenaltyBox = true;
+			cout << Rplayers[currentPlayer].getName() << " is getting out of the penalty box" << endl;
+		}
+
+		Rplayers[currentPlayer].action_w_rolling(roll);
+
+		cout << "The category is " << currentCategory() << endl;
+		askQuestion();
 		return;
 	}
 
@@ -126,19 +152,6 @@ public:
 		action_w_wrongAns();
 		nextPlayer();
 		return true;
-	}
-
-	void action_w_rolling(int roll)
-	{		
-		Rplayers[currentPlayer].setPlace(Rplayers[currentPlayer].getPlace() + roll);
-
-		if (Rplayers[currentPlayer].getPlace() > 11) {
-			Rplayers[currentPlayer].setPlace(Rplayers[currentPlayer].getPlace() - 12);
-		}
-
-		cout << Rplayers[currentPlayer].getName() << "'s new location is " << Rplayers[currentPlayer].getPlace() << endl;
-		cout << "The category is " << currentCategory() << endl;
-		askQuestion();
 	}
 
 	void action_w_correctAns()

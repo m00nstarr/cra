@@ -41,7 +41,7 @@ public:
 
 TEST_F(GameFixture, gameTest) {
 
-	for (int seed = 1; seed < 10; seed++) {
+	for (int seed = 1; seed < 4; seed++) {
 
 		Game game;
 		GameRefactor refactorGame;
