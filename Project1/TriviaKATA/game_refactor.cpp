@@ -1,9 +1,35 @@
 #pragma once
 #include "game.h"
 
+class Player {
+
+public:
+	Player(const string& name) : name(name) {
+		place = 0;
+		purse = 0;
+		inPenaltyBox = false;
+	};
+
+	string getName() const { return name; }
+	int getPlace() const { return place; }
+	int getPurse() const { return purse; }
+	bool getPenaltyBox() const { return inPenaltyBox; }
+
+	void setPlace(int place) { this->place = place; }
+	void setPurse(int purse) { this->purse = purse; }
+	void setPenalty(bool penalty) { this->inPenaltyBox = penalty; }
+
+private:
+	string name;
+	int place;
+	int purse;
+	bool inPenaltyBox;
+};
+
+
 class GameRefactor : public IGame {
 public:
-	GameRefactor() : currentPlayer{ 0 }, places{}, purses{} {
+	GameRefactor() : currentPlayer{ 0 } {
 		for (int i = 0; i < 50; i++) {
 			string str1 = "Pop Question " + to_string(i);
 			popQuestions.push_back(str1);
@@ -29,9 +55,8 @@ public:
 
 	bool add(string playerName) {
 		players.push_back(playerName);
-		places[howManyPlayers() - 1] = 0;
-		purses[howManyPlayers() - 1] = 0;
-		inPenaltyBox[howManyPlayers() - 1] = false;
+		Rplayers.push_back(Player{ playerName });
+
 
 		cout << playerName << " was added" << endl;
 		cout << "They are player number " << players.size() << endl;
@@ -39,45 +64,34 @@ public:
 	}
 
 	int howManyPlayers() {
-		return (int)players.size();
+		return (int)Rplayers.size();
 	}
 
 	void rolling(int roll) {
-		cout << players[currentPlayer] << " is the current player" << endl;
+		cout << Rplayers[currentPlayer].getName() << " is the current player" << endl;
 		cout << "They have rolled a " << roll << endl;
 
-		if (inPenaltyBox[currentPlayer]) {
+		if (Rplayers[currentPlayer].getPenaltyBox()) {
 			if (roll % 2 != 0) {
 				isGettingOutOfPenaltyBox = true;
+				cout << Rplayers[currentPlayer].getName() << " is getting out of the penalty box" << endl;
 
-				cout << players[currentPlayer] << " is getting out of the penalty box" << endl;
-				places[currentPlayer] = places[currentPlayer] + roll;
-				if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
-
-				cout << players[currentPlayer] << "'s new location is " << places[currentPlayer] << endl;
-				cout << "The category is " << currentCategory() << endl;
-				askQuestion();
+				action_w_rolling(roll);
+				return;
 			}
-			else {
-				cout << players[currentPlayer] << " is not getting out of the penalty box" << endl;
-				isGettingOutOfPenaltyBox = false;
-			}
-
+			cout << Rplayers[currentPlayer].getName() << " is not getting out of the penalty box" << endl;
+			isGettingOutOfPenaltyBox = false;
+			return;
 		}
-		else {
-			places[currentPlayer] = places[currentPlayer] + roll;
-			if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
 
-			cout << players[currentPlayer] << "'s new location is " << places[currentPlayer] << endl;
-			cout << "The category is " << currentCategory() << endl;
-			askQuestion();
-		}
+		action_w_rolling(roll);
+		return;
 	}
 
 	bool wasCorrectlyAnswered() {
-		if (inPenaltyBox[currentPlayer]) {
+		if (Rplayers[currentPlayer].getPenaltyBox()) {
 			if (isGettingOutOfPenaltyBox) {
-				inPenaltyBox[currentPlayer] = false;
+				Rplayers[currentPlayer].setPenalty(false);
 				action_w_correctAns();
 				bool winner = didPlayerWin();
 				nextPlayer();
@@ -92,14 +106,6 @@ public:
 		return winner;
 	}
 
-	void action_w_correctAns()
-	{
-		cout << "Answer was correct!!!!" << endl;
-
-		purses[currentPlayer]++;
-		cout << players[currentPlayer] << " now has "
-			<< purses[currentPlayer] << " Gold Coins." << endl;
-	}
 
 	void nextPlayer()
 	{
@@ -108,12 +114,10 @@ public:
 	}
 
 	bool wrongAnswer() {
-		if (inPenaltyBox[currentPlayer]) {
+		if (Rplayers[currentPlayer].getPenaltyBox()) {
 			if (isGettingOutOfPenaltyBox) {
 				action_w_wrongAns();
-
 				nextPlayer();
-
 				return true;
 			}
 			nextPlayer();
@@ -124,21 +128,41 @@ public:
 		return true;
 	}
 
+	void action_w_rolling(int roll)
+	{		
+		Rplayers[currentPlayer].setPlace(Rplayers[currentPlayer].getPlace() + roll);
+
+		if (Rplayers[currentPlayer].getPlace() > 11) {
+			Rplayers[currentPlayer].setPlace(Rplayers[currentPlayer].getPlace() - 12);
+		}
+
+		cout << Rplayers[currentPlayer].getName() << "'s new location is " << Rplayers[currentPlayer].getPlace() << endl;
+		cout << "The category is " << currentCategory() << endl;
+		askQuestion();
+	}
+
+	void action_w_correctAns()
+	{
+		cout << "Answer was correct!!!!" << endl;
+
+		Rplayers[currentPlayer].setPurse(Rplayers[currentPlayer].getPurse() + 1);
+		cout << Rplayers[currentPlayer].getName() << " now has "
+			<< Rplayers[currentPlayer].getPurse() << " Gold Coins." << endl;
+	}
+
 	void action_w_wrongAns()
 	{
 		cout << "Question was incorrectly answered" << endl;
-		cout << players[currentPlayer] + " was sent to the penalty box" << endl;
-		inPenaltyBox[currentPlayer] = true;
+		cout << Rplayers[currentPlayer].getName() + " was sent to the penalty box" << endl;
+		Rplayers[currentPlayer].setPenalty(true);
+
 	}
 
 private:
 	vector<string> players;
+	vector<Player> Rplayers;
 
-	int places[6];
-	int purses[6];
-
-	bool inPenaltyBox[6];
-
+	//int places[6];
 	list<string> popQuestions;
 	list<string> scienceQuestions;
 	list<string> sportsQuestions;
@@ -170,20 +194,24 @@ private:
 	}
 
 	string currentCategory() {
-		if (places[currentPlayer] == 0) return "Pop";
-		if (places[currentPlayer] == 4) return "Pop";
-		if (places[currentPlayer] == 8) return "Pop";
-		if (places[currentPlayer] == 1) return "Science";
-		if (places[currentPlayer] == 5) return "Science";
-		if (places[currentPlayer] == 9) return "Science";
-		if (places[currentPlayer] == 2) return "Sports";
-		if (places[currentPlayer] == 6) return "Sports";
-		if (places[currentPlayer] == 10) return "Sports";
+
+		int currentPlace = Rplayers[currentPlayer].getPlace();
+		
+		if (currentPlace == 0) return "Pop";
+		if (currentPlace == 4) return "Pop";
+		if (currentPlace == 8) return "Pop";
+		if (currentPlace == 1) return "Science";
+		if (currentPlace == 5) return "Science";
+		if (currentPlace == 9) return "Science";
+		if (currentPlace == 2) return "Sports";
+		if (currentPlace == 6) return "Sports";
+		if (currentPlace == 10) return "Sports";
+		
 		return "Rock";
 	}
 
 	bool didPlayerWin() {
-		return !(purses[currentPlayer] == 6);
+		return !(Rplayers[currentPlayer].getPurse() == 6);
 	}
 };
 
