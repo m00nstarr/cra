@@ -79,46 +79,43 @@ public:
 	}
 
 	bool add(string playerName) {
-		players.push_back(playerName);
-		Rplayers.push_back(Player{ playerName });
-
-
+		players.push_back(Player{ playerName });
 		cout << playerName << " was added" << endl;
 		cout << "They are player number " << players.size() << endl;
 		return true;
 	}
 
 	int howManyPlayers() {
-		return (int)Rplayers.size();
+		return (int)players.size();
 	}
 
 	void rolling(int roll) {
-		cout << Rplayers[currentPlayer].getName() << " is the current player" << endl;
+		cout << players[currentPlayer].getName() << " is the current player" << endl;
 		cout << "They have rolled a " << roll << endl;
 
-		if (Rplayers[currentPlayer].getPenaltyBox() && (roll % 2 == 0)) {
-			cout << Rplayers[currentPlayer].getName() << " is not getting out of the penalty box" << endl;
+		if (players[currentPlayer].getPenaltyBox() && (roll % 2 == 0)) {
+			cout << players[currentPlayer].getName() << " is not getting out of the penalty box" << endl;
 			isGettingOutOfPenaltyBox = false;
 			return;
 		}
 
-		if (Rplayers[currentPlayer].getPenaltyBox()) {
+		if (players[currentPlayer].getPenaltyBox()) {
 			isGettingOutOfPenaltyBox = true;
-			cout << Rplayers[currentPlayer].getName() << " is getting out of the penalty box" << endl;
+			cout << players[currentPlayer].getName() << " is getting out of the penalty box" << endl;
 		}
 
-		Rplayers[currentPlayer].action_w_rolling(roll);
-
+		players[currentPlayer].action_w_rolling(roll);
 		cout << "The category is " << currentCategory() << endl;
 		askQuestion();
+		
 		return;
 	}
 
 	bool wasCorrectlyAnswered() {
-		if (Rplayers[currentPlayer].getPenaltyBox()) {
+		if (players[currentPlayer].getPenaltyBox()) {
 			if (isGettingOutOfPenaltyBox) {
-				Rplayers[currentPlayer].setPenalty(false);
-				action_w_correctAns();
+				players[currentPlayer].setPenalty(false);
+				players[currentPlayer].action_w_correctAns();
 				bool winner = didPlayerWin();
 				nextPlayer();
 				return winner;
@@ -126,12 +123,26 @@ public:
 			nextPlayer();
 			return true;
 		}
-		action_w_correctAns();
+		players[currentPlayer].action_w_correctAns();
 		bool winner = didPlayerWin();
 		nextPlayer();
 		return winner;
 	}
 
+	bool wrongAnswer() {
+		if (players[currentPlayer].getPenaltyBox()) {
+			if (isGettingOutOfPenaltyBox) {
+				players[currentPlayer].action_w_wrongAns();
+				nextPlayer();
+				return true;
+			}
+			nextPlayer();
+			return true;
+		}
+		players[currentPlayer].action_w_wrongAns();
+		nextPlayer();
+		return true;
+	}
 
 	void nextPlayer()
 	{
@@ -139,41 +150,9 @@ public:
 		if (currentPlayer == players.size()) currentPlayer = 0;
 	}
 
-	bool wrongAnswer() {
-		if (Rplayers[currentPlayer].getPenaltyBox()) {
-			if (isGettingOutOfPenaltyBox) {
-				action_w_wrongAns();
-				nextPlayer();
-				return true;
-			}
-			nextPlayer();
-			return true;
-		}
-		action_w_wrongAns();
-		nextPlayer();
-		return true;
-	}
-
-	void action_w_correctAns()
-	{
-		cout << "Answer was correct!!!!" << endl;
-
-		Rplayers[currentPlayer].setPurse(Rplayers[currentPlayer].getPurse() + 1);
-		cout << Rplayers[currentPlayer].getName() << " now has "
-			<< Rplayers[currentPlayer].getPurse() << " Gold Coins." << endl;
-	}
-
-	void action_w_wrongAns()
-	{
-		cout << "Question was incorrectly answered" << endl;
-		cout << Rplayers[currentPlayer].getName() + " was sent to the penalty box" << endl;
-		Rplayers[currentPlayer].setPenalty(true);
-
-	}
 
 private:
-	vector<string> players;
-	vector<Player> Rplayers;
+	vector<Player> players;
 
 	//int places[6];
 	list<string> popQuestions;
@@ -208,7 +187,7 @@ private:
 
 	string currentCategory() {
 
-		int currentPlace = Rplayers[currentPlayer].getPlace();
+		int currentPlace = players[currentPlayer].getPlace();
 		
 		if (currentPlace == 0) return "Pop";
 		if (currentPlace == 4) return "Pop";
@@ -224,7 +203,7 @@ private:
 	}
 
 	bool didPlayerWin() {
-		return !(Rplayers[currentPlayer].getPurse() == 6);
+		return !(players[currentPlayer].getPurse() == 6);
 	}
 };
 
