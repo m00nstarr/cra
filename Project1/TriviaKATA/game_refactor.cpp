@@ -85,30 +85,27 @@ public:
 					<< purses[currentPlayer] << " Gold Coins." << endl;
 
 				bool winner = didPlayerWin();
-				currentPlayer++;
-				if (currentPlayer == players.size()) currentPlayer = 0;
-
+				nextPlayer();
 				return winner;
 			}
-			else {
-				currentPlayer++;
-				if (currentPlayer == players.size()) currentPlayer = 0;
-				return true;
-			}
+			nextPlayer();
+			return true;
 		}
-		else {
-			cout << "Answer was correct!!!!" << endl;
+		cout << "Answer was correct!!!!" << endl;
 
-			purses[currentPlayer]++;
-			cout << players[currentPlayer] << " now has "
-				<< purses[currentPlayer] << " Gold Coins." << endl;
+		purses[currentPlayer]++;
+		cout << players[currentPlayer] << " now has "
+			<< purses[currentPlayer] << " Gold Coins." << endl;
 
-			bool winner = didPlayerWin();
-			currentPlayer++;
-			if (currentPlayer == players.size()) currentPlayer = 0;
+		bool winner = didPlayerWin();
+		nextPlayer();
+		return winner;
+	}
 
-			return winner;
-		}
+	void nextPlayer()
+	{
+		currentPlayer++;
+		if (currentPlayer == players.size()) currentPlayer = 0;
 	}
 
 	bool wrongAnswer() {
@@ -118,13 +115,13 @@ public:
 				cout << players[currentPlayer] + " was sent to the penalty box" << endl;
 				inPenaltyBox[currentPlayer] = true;
 
-				currentPlayer++;
-				if (currentPlayer == players.size()) currentPlayer = 0;
+				nextPlayer();
+
 				return true;
 			}
 			else {
-				currentPlayer++;
-				if (currentPlayer == players.size()) currentPlayer = 0;
+				nextPlayer();
+
 				return true;
 			}
 		}
@@ -133,8 +130,8 @@ public:
 			cout << players[currentPlayer] + " was sent to the penalty box" << endl;
 			inPenaltyBox[currentPlayer] = true;
 
-			currentPlayer++;
-			if (currentPlayer == players.size()) currentPlayer = 0;
+			nextPlayer();
+
 			return true;
 		}
 	}

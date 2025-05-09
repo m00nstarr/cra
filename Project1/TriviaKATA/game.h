@@ -12,7 +12,9 @@ using std::to_string;
 using std::cout;
 using std::endl;
 
-interface IGame {
+interface IGame{
+	virtual ~IGame() {};
+
 	virtual bool add(string player) = 0;
 	virtual void rolling(int roll) = 0;
 	virtual bool wasCorrectlyAnswered() = 0;
