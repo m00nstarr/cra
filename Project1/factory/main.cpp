@@ -11,46 +11,58 @@ public:
 class BlueDoll : public Doll {
 public:
 	void push() override {
-		cout << "ÆÄ¶ûÆÄ¶û\n";
+		cout << "ÆÄ¶ûÆÄ¶û ÀÎÇü\n";
 	};
 };
 
 class RedDoll : public Doll {
 public:
 	void push() override {
-		cout << "»¡°­»¡°­\n";
+		cout << "»¡°­»¡°­ ÀÎÇü\n";
 	};
 };
 
-class Factory {
+class YellowDoll : public Doll {
 public:
-	Doll* makeFactory(string type) {
+	void push() override {
+		cout << "³ë¶û³ë¶û ÀÎÇü\n";
+	};
+};
 
-		if (type == "red") {
-			return new RedDoll();
-		}
-		
-		if (type == "blue") {
-			return new BlueDoll();
-		}
+class Creator {
+public:
+	Doll* myDoll;
 
+	void play() {
+		Doll* myDoll = factoryMethod();
+		myDoll->push();
+	};
+	virtual Doll* factoryMethod() {
 		return nullptr;
+	};
+};
+
+class BlueCreatorBaby : public Creator {
+public:
+	Doll* factoryMethod() override {
+		return new BlueDoll();
 	}
 };
 
+class RedCreatorBaby : public Creator {
+public:
+	Doll* factoryMethod() override {
+		return new RedDoll();
+	}
+
+};
+
+
 int main() {
 
-	Factory* dollFactory = new Factory();
-	Doll* i_made_this_doll = dollFactory->makeFactory("blue");
-	
-	i_made_this_doll->push();
-	delete i_made_this_doll;
+	Creator* creator = new BlueCreatorBaby();
+	creator->play();
 
-	i_made_this_doll = dollFactory->makeFactory("red");
-	i_made_this_doll->push();
-
-	delete i_made_this_doll;
-	delete dollFactory;
 
 	return 0;
 }
