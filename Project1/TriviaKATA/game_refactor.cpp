@@ -78,12 +78,7 @@ public:
 		if (inPenaltyBox[currentPlayer]) {
 			if (isGettingOutOfPenaltyBox) {
 				inPenaltyBox[currentPlayer] = false;
-				cout << "Answer was correct!!!!" << endl;
-
-				purses[currentPlayer]++;
-				cout << players[currentPlayer] << " now has "
-					<< purses[currentPlayer] << " Gold Coins." << endl;
-
+				action_w_correctAns();
 				bool winner = didPlayerWin();
 				nextPlayer();
 				return winner;
@@ -91,15 +86,19 @@ public:
 			nextPlayer();
 			return true;
 		}
+		action_w_correctAns();
+		bool winner = didPlayerWin();
+		nextPlayer();
+		return winner;
+	}
+
+	void action_w_correctAns()
+	{
 		cout << "Answer was correct!!!!" << endl;
 
 		purses[currentPlayer]++;
 		cout << players[currentPlayer] << " now has "
 			<< purses[currentPlayer] << " Gold Coins." << endl;
-
-		bool winner = didPlayerWin();
-		nextPlayer();
-		return winner;
 	}
 
 	void nextPlayer()
@@ -111,29 +110,25 @@ public:
 	bool wrongAnswer() {
 		if (inPenaltyBox[currentPlayer]) {
 			if (isGettingOutOfPenaltyBox) {
-				cout << "Question was incorrectly answered" << endl;
-				cout << players[currentPlayer] + " was sent to the penalty box" << endl;
-				inPenaltyBox[currentPlayer] = true;
+				action_w_wrongAns();
 
 				nextPlayer();
 
 				return true;
 			}
-			else {
-				nextPlayer();
-
-				return true;
-			}
-		}
-		else {
-			cout << "Question was incorrectly answered" << endl;
-			cout << players[currentPlayer] + " was sent to the penalty box" << endl;
-			inPenaltyBox[currentPlayer] = true;
-
 			nextPlayer();
-
 			return true;
 		}
+		action_w_wrongAns();
+		nextPlayer();
+		return true;
+	}
+
+	void action_w_wrongAns()
+	{
+		cout << "Question was incorrectly answered" << endl;
+		cout << players[currentPlayer] + " was sent to the penalty box" << endl;
+		inPenaltyBox[currentPlayer] = true;
 	}
 
 private:
