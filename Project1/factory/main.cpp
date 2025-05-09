@@ -72,26 +72,9 @@ public:
 
 class Creator {
 public:
-	Doll* myDoll;
-
-	void play() {
-		Doll* myDoll = createDoll();
-		Shoe* myShoe = createShoe();
-		Acc* myAcc = createAcc();
-
-		myDoll->push();
-		myShoe->wear();
-		myAcc->put();
-
-		delete myDoll;
-		delete myShoe;
-		delete myAcc;
-	};
-
 	virtual Doll* createDoll() = 0;
 	virtual Shoe* createShoe() = 0;
 	virtual Acc* createAcc() = 0;
-
 };
 
 class BlueCreatorBaby : public Creator {
@@ -120,14 +103,29 @@ public:
 	}
 };
 
+void play(Creator *creator) {
+	Doll* myDoll = creator->createDoll();
+	Shoe* myShoe = creator->createShoe();
+	Acc* myAcc = creator->createAcc();
+
+	myDoll->push();
+	myShoe->wear();
+	myAcc->put();
+
+	delete myDoll;
+	delete myShoe;
+	delete myAcc;
+};
+
+
 int main() {
 
 	Creator* creator = new BlueCreatorBaby();
-	creator->play();
+	play(creator);
 	delete creator;
 
 	creator = new TinyCreatorBaby();
-	creator->play();
+	play(creator);
 	delete creator;
 
 	return 0;
