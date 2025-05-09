@@ -27,6 +27,9 @@
     <ClCompile Include="unit_test.cpp">
       <Filter>테스트 코드</Filter>
     </ClCompile>
+    <ClCompile Include="game_refactor.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">

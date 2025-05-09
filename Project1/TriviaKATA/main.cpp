@@ -10,7 +10,8 @@ int main() {
 	aGame.add("Sue");
 
 	do {
-		aGame.rolling();
+		int roll = rand() % 6 + 1;
+		aGame.rolling(roll);
 
 		if (rand() % 9 == 7) {
 			notAWinner = aGame.wrongAnswer();

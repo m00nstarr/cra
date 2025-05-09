@@ -128,6 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="game_refactor.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="unit_test.cpp" />
   </ItemGroup>
